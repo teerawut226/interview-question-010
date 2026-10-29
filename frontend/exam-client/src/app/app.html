@@ -1,0 +1,37 @@
+<div class="container" style="max-width: 600px; margin: 30px auto; font-family: sans-serif;">
+  <h2>แบบทดสอบออนไลน์ (Interview Exam)</h2>
+
+  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+    <label style="white-space: nowrap;"><b>ชื่อ-นามสกุล:</b></label>
+    <input type="text" [(ngModel)]="fullname" [disabled]="result !== null" placeholder="กรอกชื่อของคุณ" style="flex: 1; padding: 8px;">
+  </div>
+
+  <!-- วนลูปแสดงคำถาม -->
+  <div *ngFor="let q of questions; let i = index" style="margin-bottom: 25px; padding: 15px; border: 1px solid #ccc; border-radius: 5px;">
+    <p><b>ข้อที่ {{ i + 1 }}: {{ q.title }}</b></p>
+    
+    <div *ngFor="let c of q.choices" style="margin-bottom: 8px;">
+      <label style="cursor: pointer;">
+        <input type="radio" [name]="'question_' + q.id" [value]="c.id" [(ngModel)]="selectedAnswers[q.id]" [disabled]="result !== null">
+        {{ c.text }}
+      </label>
+    </div>
+  </div>
+
+  <!-- ส่วนของปุ่มและข้อความแสดงผลคะแนนข้างๆ -->
+  <div style="display: flex; align-items: center; gap: 15px; margin-top: 20px;">
+    <!-- ปุ่มส่งคำตอบ / สอบอีกครั้ง -->
+    <button *ngIf="!result" (click)="onSubmit()" [disabled]="loading" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+      {{ loading ? 'กำลังส่ง...' : 'ส่งข้อสอบ' }}
+    </button>
+
+    <button *ngIf="result" (click)="resetExam()" style="padding: 10px 20px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
+      สอบอีกครั้ง
+    </button>
+
+    <!-- Text แสดงผลคะแนนข้างปุ่ม -->
+    <span *ngIf="result" style="font-size: 16px; font-weight: bold; color: #28a745;">
+      คุณ {{ result.fullName }} สอบได้คะแนน : {{ result.score }} / {{ result.totalScore }}
+    </span>
+  </div>
+</div>
